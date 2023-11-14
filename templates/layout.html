@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Estilo adicional para los botones */
+        .btn-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+        }
+        .btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Button Container -->
+    <div class="btn-container">
+        <!-- Burger Menu Button (Mobile) -->
+        <button class="lg:hidden btn" id="toggleBurgerMenu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Close Menu Button (Mobile) -->
+        <button class="lg:hidden btn hidden" id="closeBurgerMenu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sidebar (Hidden by Default on Mobile) -->
+    <div class="h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform ease-in-out duration-300" id="sidebar">
+        <div class="p-4">
+            <h1 class="text-2xl font-semibold">Sidebar</h1>
+        </div>
+        <ul class="mt-6">
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/home">Home</a></li>
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/registro_profesores">Profesores</a></li>
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/registro_cursos">Cursos</a></li>
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/registro_estudiantes">Estudiantes</a></li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="ml-0 lg:ml-64 p-4">
+        {% block body %} {% endblock %}
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const toggleBurgerMenu = document.getElementById("toggleBurgerMenu");
+        const closeBurgerMenu = document.getElementById("closeBurgerMenu");
+
+        toggleBurgerMenu.addEventListener("click", () => {
+            sidebar.classList.toggle("-translate-x-full");
+            closeBurgerMenu.classList.remove("hidden");
+            toggleBurgerMenu.classList.add("hidden");
+        });
+
+        closeBurgerMenu.addEventListener("click", () => {
+            sidebar.classList.toggle("-translate-x-full");
+            toggleBurgerMenu.classList.remove("hidden");
+            closeBurgerMenu.classList.add("hidden");
+        });
+    </script>
+</body>
+</html>

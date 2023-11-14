@@ -1,0 +1,84 @@
+{% extends 'layout.html'%} 
+    {%block title%} Cursos {%endblock%} 
+    {% block body %}
+    <div class="opciones">
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" type="button" id="agregar">Nuevo Curso</button>
+        <a href="/ver_cursos">
+          <button class="bg-green-500 hover-bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" type="button" id="mostrar-registros">Ver Cursos</button>
+        </a>
+      </div>
+
+    <div class="max-w-lg mx-auto bg-white p-6 rounded shadow hidden" id="formulario">
+        <h1 class="text-2xl font-semibold mb-4">Formulario de Curso</h1>
+        <form action="/cursos_registro" method="POST">
+            <div class="mb-4">
+                <label for="idcurso" class="block text-gray-600 font-semibold">ID del Curso:</label>
+                <input type="text" name="idcurso" id="idcurso" class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="nombrecurso" class="block text-gray-600 font-semibold">Nombre del Curso:</label>
+                <input type="text" name="nombrecurso" id="nombrecurso" class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="descripcioncurso" class="block text-gray-600 font-semibold">Descripción del Curso:</label>
+                <textarea name="descripcioncurso" id="descripcioncurso" class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500" rows="4" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="creditos" class="block text-gray-600 font-semibold">Créditos:</label>
+                <input type="number" name="creditos" id="creditos" class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Enviar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="overflow-x-auto" id="tabla">
+        <table class="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
+            </tr>
+          </thead>
+          <tbody "bg-white divide-y divide-gray-200">
+            {% for dato in datos %}
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">{{ dato.cursoid }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombrecurso }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ dato.descripcioncurso }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ dato.creditos }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <script>
+        // Obtener los elementos del DOM
+        const agregarAlumnoButton = document.getElementById('agregar');
+        const mostrarRegistrosButton = document.getElementById('mostrar');
+        const formularioDocentes = document.getElementById('formulario');
+        const tablaDocentes = document.getElementById('tabla');
+      
+        // Función para mostrar el formulario
+        function mostrarFormulario() {
+          formularioDocentes.style.display = 'block';
+          tablaDocentes.style.display = 'none';
+        }
+      
+        // Función para mostrar la tabla
+        function mostrarTabla() {
+          formularioDocentes.style.display = 'none';
+          tablaDocentes.style.display = 'block';
+        }
+      
+        // Escuchar eventos de clic en los botones
+        agregarAlumnoButton.addEventListener('click', mostrarFormulario);
+        mostrarRegistrosButton.addEventListener('click', mostrarTabla);
+      </script>
+
+
+    {%endblock%}

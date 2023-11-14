@@ -1,0 +1,97 @@
+{% extends 'layout.html'%} 
+    {%block title%} Estudiantes {%endblock%} 
+    {% block body %}
+    <div class="opciones">
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" type="button" id="agregar">Nuevo Estudiante</button>
+        <a href="/ver_estudiantes">
+            <button class="bg-green-500 hover-bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" type="button" id="mostrar">Ver Registro</button>
+        </a>
+        <a href="/busqueda_actualizar">
+            <button class="bg-green-500 hover-bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" type="button" id="actualizar">Actualizar</button>
+        </a>
+    </div>
+
+    <!--ESTE ES EL FORMULARIO DE REGISTRO-->
+
+    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg hidden" id = "formulario">
+        <h2 class="text-2xl font-semibold mb-4">Formulario de Registro</h2>
+        <form action="/estudiantes_registro" method="post">
+            <div class="mb-4">
+                <label for="carnet" class="block text-gray-600" >Carnet</label>
+                <input type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="mb-4">
+                <label for="nombre" class="block text-gray-600">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="mb-4">
+                <label for="apellido" class="block text-gray-600">Apellido</label>
+                <input type="text" id="apellido" name="apellido" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="mb-4">
+                <label for="fecha_nacimiento" class="block text-gray-600">Fecha de Nacimiento</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" value="2000-01-01">
+            </div>
+            <div class="mb-4">
+                <label for="telefono" class="block text-gray-600">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="mb-4">
+                <label for="correo" class="block text-gray-600">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Enviar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="w-full overflow-x-auto" id = "tabla">
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Carnet</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Nac.</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for dato in datos %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.estudianteid }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombre }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.apellido }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.fechanacimiento }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.telefono }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Obtener los elementos del DOM
+        const agregarAlumnoButton = document.getElementById('agregar');
+        const mostrarRegistrosButton = document.getElementById('mostrar-registros');
+        const formulario = document.getElementById('formulario');
+        const tabla = document.getElementById('tabla');
+    
+        // Escuchar eventos de clic en los botones
+        agregarAlumnoButton.addEventListener('click', function (e) {
+            formulario.style.display = 'block';
+            tabla.style.display = 'none';
+        });
+    
+        mostrarRegistrosButton.addEventListener('click', function (e) {
+            formulario.style.display = 'none';
+            tabla.style.display = 'block';
+        });
+    </script>
+    
+    
+    {%endblock%}

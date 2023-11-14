@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block title %}Busqueda y Actualización{% endblock %}
+{% block body %}
+
+<div id="buscador" class="w-full text-center">
+    <h2 class="text-2xl text-center font-semibold mb-4">Actualizar los Datos de Estudiante</h2>
+    <form action="/actualizar" method="GET">
+        <div class="mb-4">
+            <label for="carnet" class="block text-gray-600">Identificador</label>
+            <input type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-6/12 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required>
+            <button id="buscar-button" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300" type="submit">Buscar</button>
+        </div>
+    </form>
+    <hr>
+</div>
+
+<div id="datosActualizar" class="datosActualizar">
+    <form action="/actualizar" method="POST">
+        {% if datos %}
+            <div class="mb-4">
+                <label for="carnet" class="block text-gray-600">Carnet</label>
+                <input type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-6/12 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required Value = "{{ datos.estudianteid }}">
+            </div>
+            <div class="mb-4">
+                <label for="nombre" class="block text-gray-600">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required value="{{ datos.nombre }}">
+            </div>
+            <div class="mb-4">
+                <label for="apellido" class="block text-gray-600">Apellido</label>
+                <input type="text" id="apellido" name="apellido" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required value="{{ datos.apellido }}">
+            </div>
+            <div class="mb-4">
+                <label for="fecha_nacimiento" class="block text-gray-600">Fecha de Nacimiento</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" value="{{ datos.fechanacimiento }}">
+            </div>
+            <div class="mb-4">
+                <label for="telefono" class="block text-gray-600">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" value="{{ datos.telefono }}">
+            </div>
+            <div class="mb-4">
+                <label for="correo" class="block text-gray-600">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" value="{{ datos.correoelectronico }}">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Actualizar</button>
+            </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
