@@ -1,9 +1,8 @@
 from flask import Flask
 from sqlalchemy import create_engine, text
-import os
-from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from dotenv import load_dotenv
+import os
 
 load_dotenv(override=True)
 
@@ -24,9 +23,10 @@ def create_tables():
             FechaNacimiento DATE,
             Telefono VARCHAR(15),
             CorreoElectronico VARCHAR(100),
-            SEMESTRE INT
+            SEMESTRE INT UNIQUE
         )
     """
+
 
     tabla_cursos = """
         CREATE TABLE Cursos (
@@ -38,9 +38,6 @@ def create_tables():
         )
     """
 
-    db.execute(text(tabla_estudiantes))
-    db.execute(text(tabla_cursos))
-
     tabla_profesores = """
         CREATE TABLE Profesores (
             cedula_profesor TEXT PRIMARY KEY,
@@ -50,8 +47,6 @@ def create_tables():
             Especializacion VARCHAR(100)
         )
     """
-
-    db.execute(text(tabla_profesores))
 
     tabla_matricula = """
         CREATE TABLE Matricula (
@@ -70,8 +65,6 @@ def create_tables():
         )
     """
 
-    db.execute(text(tabla_matricula))
-
     tabla_calificaciones = """
         CREATE TABLE Calificaciones (
             CalificacionID INT PRIMARY KEY,
@@ -83,13 +76,18 @@ def create_tables():
         )
     """
 
-    db.execute(text(tabla_calificaciones))
-
-    print("La base de datos fue creada")
+    try:
+        for tabla in [tabla_estudiantes, tabla_cursos, tabla_profesores, tabla_matricula, tabla_calificaciones]:
+            db.execute(text(tabla))
+        db.commit()
+        print("La base de datos fue creada")
+    except Exception as e:
+        print(f"Error al crear la base de datos: {e}")
+        db.rollback()
 
 def main():
-    print("Creando la bases de datos")
-    print("Datos Insertados")
+    print("Creando la base de datos")
+    create_tables()
 
 if __name__ == "__main__":
     main()
