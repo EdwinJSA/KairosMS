@@ -23,7 +23,8 @@ def create_tables():
             Apellido VARCHAR(50),
             FechaNacimiento DATE,
             Telefono VARCHAR(15),
-            CorreoElectronico VARCHAR(100)
+            CorreoElectronico VARCHAR(100),
+            SEMESTRE INT
         )
     """
 
@@ -32,7 +33,8 @@ def create_tables():
             CursoID INT PRIMARY KEY,
             NombreCurso VARCHAR(100),
             DescripcionCurso TEXT,
-            creditos INT
+            creditos INT,
+            SEMESTRE INT
         )
     """
 
@@ -58,6 +60,10 @@ def create_tables():
             CursoID INT,
             ProfesorID TEXT,
             AnoAcademico INT,
+            estudianteSemestre INT,
+            cursoSemestre INT,
+            FOREIGN KEY (estudianteSemestre) REFERENCES Estudiantes (SEMESTRE),
+            FOREIGN KEY (cursoSemestre) REFERENCES Estudiantes (SEMESTRE),
             FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
             FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID),
             FOREIGN KEY (ProfesorID) REFERENCES Profesores (cedula_profesor)
@@ -83,11 +89,7 @@ def create_tables():
 
 def main():
     print("Creando la bases de datos")
-    
-    query = text("INSERT INTO Estudiantes (EstudianteID, Nombre, Apellido, FechaNacimiento, Telefono, CorreoElectronico) VALUES ('edwinjsa', 'Hello', 'World', '2000-07-10', '75342838', 'edwinjsa2021@gmail.com')")
-    db.execute(query)
     print("Datos Insertados")
-    db.commit()
 
 if __name__ == "__main__":
     main()
