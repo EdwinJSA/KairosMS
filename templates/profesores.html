@@ -57,23 +57,24 @@
               </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-              {% for dato in datos %}
-                  <tr>
-                      <td class="px-2 py-4 whitespace-nowrap">{{ dato.cedula_profesor }}</td>
-                      <td class="px-2 py-4 whitespace-nowrap">{{ dato.nombreprofesor }}</td>
-                      <td class="px-2 py-4 whitespace-nowrap">{{ dato.apellidoprofesor }}</td>
-                      <td class="px-2 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
-                      <td class="px-2 py-4 whitespace-nowrap">{{ dato.especializacion }}</td>
-                      <td class="px-2 py-4 whitespace-nowrap">
-                          <button class="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded-full mr-2">
-                              Editar
-                          </button>
-                          <button class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
-                              Eliminar
-                          </button>
-                      </td>
-                  </tr>
-              {% endfor %}
+            {% for dato in datos %}
+            <form method="POST" action="/eliminarDocente">
+                <tr>
+                    <td class="px-2 py-4 whitespace-nowrap" name="cedula">{{ dato.cedula_profesor }}</td>
+                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.nombreprofesor }}</td>
+                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.apellidoprofesor }}</td>
+                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
+                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.especializacion }}</td>
+                    <td class="px-2 py-4 whitespace-nowrap">
+                        <input type="hidden" name="cedula" value="{{ dato.cedula_profesor }}">
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+        
           </tbody>
       </table>
   </div>

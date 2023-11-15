@@ -176,9 +176,14 @@ def actualizar():
 
     return render_template('busqueda.html', datos=datos)
 
-    
-    
-
+@app.route("/eliminarDocente", methods=['POST'])
+def eliminar():
+    if request.method == 'POST':
+        cedula = request.form.get('cedula')
+        query = text("DELETE FROM profesores WHERE cedula_profesor = :cedula")
+        db.execute(query, {'cedula': cedula})
+        db.commit()
+        return render_template('profesores.html')
 
 if __name__ == '__main__':
     app.run()
