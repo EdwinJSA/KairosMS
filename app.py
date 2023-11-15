@@ -1,3 +1,5 @@
+# Programa: KairosMS
+
 import os
 from psycopg2 import *
 from sqlalchemy import create_engine, text
