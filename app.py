@@ -31,6 +31,10 @@ def index():
 def busqueda_actualizar():
     return render_template('busqueda.html')
 
+@app.route("/matricula")
+def matricula():
+    return render_template('matricula.html')
+
 # LOGIN
 @app.route("/login", methods=['POST'])
 def login():
@@ -48,7 +52,8 @@ def login():
 @app.route("/registro_profesores")
 def profesores():
     if "user_id" in session:
-        return render_template('profesores.html')
+        query = text("SELECT nombrecurso FROM cursos")
+        return render_template('profesores.html', cursos = db.execute(query).fetchall())
     
     return render_template('index.html')
 
@@ -79,20 +84,23 @@ def home():
 # Toma los valores del formulario y los almacena en la base de datos - tabla profesores
 @app.route("/docentes_registro", methods=['POST'])
 def registro_docentes():
-    cedula = request.form.get('cedula')
-    nombre = request.form.get('nombre')
-    apellido = request.form.get('apellido')
-    correo = request.form.get('correo')
-    titulo = request.form.get('titulo')
+    try:
+        data = request.get_json()
+        cedula = data.get('cedula')
+        nombre = data.get('nombre')
+        apellido = data.get('apellido')
+        correo = data.get('correo')
+        titulo = data.get('titulo')
+        materias = data.get('materias')
 
-    # Consulta
-    query = text("INSERT INTO profesores (cedula_profesor, nombreprofesor, apellidoprofesor, correoelectronico, especializacion) VALUES (:cedula, :nombre, :apellido, :correo, :titulo)")
+        query = text("INSERT INTO profesores (cedula_profesor, nombreprofesor, apellidoprofesor, correoelectronico, especializacion) VALUES (:cedula, :nombre, :apellido, :correo, :titulo)")
 
-    # Inserción de datos en la base de datos
-    db.execute(query, {'cedula': cedula, 'nombre': nombre, 'apellido': apellido, 'correo': correo, 'titulo': titulo})
-    db.commit()
+        db.execute(query, {'cedula': cedula, 'nombre': nombre, 'apellido': apellido, 'correo': correo, 'titulo': titulo})
+        db.commit()
 
-    return render_template('profesores.html')
+        return jsonify({'message': 'Registro exitoso'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Toma los valores del formulario y los almacena en la base de datos - tabla cursos
 @app.route("/cursos_registro", methods=['POST'])
@@ -186,6 +194,31 @@ def eliminar():
         db.execute(query, {'cedula': cedula})
         db.commit()
         return render_template('profesores.html')
+    
+@app.route("/eliminarCurso", methods=['POST'])
+def eliminarCurso():
+    if request.method == 'POST':
+        id = request.form.get('idcurso')
+        query = text("DELETE FROM cursos WHERE cursoid = :id")
+        db.execute(query, {'id': id})
+        db.commit()
+        return render_template('cursos.html')
+    
+@app.route("/eliminarEstudiante", methods=['POST'])
+def eliminarEstudiante():
+    if request.method == 'POST':
+        carnet = request.form.get('carnet')
+        query = text("DELETE FROM estudiantes WHERE estudianteid = :carnet")
+        db.execute(query, {'carnet': carnet})
+        db.commit()
+        return render_template('estudiantes.html')
+    
+@app.route('/guardar_elementos', methods=['POST'])
+def guardar_elementos():
+    data = request.get_json()
+    lista = data.get('lista', [])
+    print(lista)
+    return 'Elementos recibidos con éxito'
 
 if __name__ == '__main__':
     app.run()

@@ -50,13 +50,21 @@
           </thead>
           <tbody "bg-white divide-y divide-gray-200">
             {% for dato in datos %}
+            <form method="POST" action="/eliminarCurso">
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap">{{ dato.cursoid }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombrecurso }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ dato.descripcioncurso }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ dato.creditos }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ dato.semestre }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <input type="hidden" name="idcurso" value="{{ dato.cursoid }}">
+                  <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
+                      Eliminar
+                  </button>
+                </td>
               </tr>
+            </form>
             {% endfor %}
           </tbody>
         </table>

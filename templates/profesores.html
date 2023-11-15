@@ -12,7 +12,7 @@
 
     <div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md hidden" id="formulario-docentes">
         <h1 class="text-2xl font-semibold mb-4">Formulario de Docente</h1>
-        <form action="/docentes_registro" method="POST">
+        <form>
             <!-- Campo Cédula -->
             <div class="mb-4">
                 <label for="cedula" class="block text-sm font-medium text-gray-600" pattern="^\d{3}-\d{6}-\d{4}P$">Cédula</label>
@@ -38,12 +38,22 @@
                 <label for="titulo" class="block text-sm font-medium text-gray-600">Título Universitario</label>
                 <input type="text" id="titulo" name="titulo" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
             </div>
+            <!-- Campo Título Universitario -->
+            <div class="mb-4">
+                <label for="titulo" class="block text-sm font-medium text-gray-600">Cursos a Impartir</label>
+                {% for curso in cursos %}
+                    <ul>
+                        <li><input type="checkbox" class="clases" id="clase_{{ curso.nombrecurso }}" value="{{ curso.nombrecurso }}">{{ curso.nombrecurso }}</li>
+                    </ul>
+                {% endfor %}    
+            </div>
+    
             <!-- Botón de Enviar -->
             <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Enviar</button>
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300" onclick="ListarMaterias()">Enviar</button>
             </div>
         </form>
-    </div>
+    </div>  
     <div class="w-full overflow-x-auto" id="tabla-docentes">
       <table class="min-w-full bg-white">
           <thead>
@@ -57,52 +67,77 @@
               </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            {% for dato in datos %}
-            <form method="POST" action="/eliminarDocente">
-                <tr>
-                    <td class="px-2 py-4 whitespace-nowrap" name="cedula">{{ dato.cedula_profesor }}</td>
-                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.nombreprofesor }}</td>
-                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.apellidoprofesor }}</td>
-                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
-                    <td class="px-2 py-4 whitespace-nowrap">{{ dato.especializacion }}</td>
-                    <td class="px-2 py-4 whitespace-nowrap">
-                        <input type="hidden" name="cedula" value="{{ dato.cedula_profesor }}">
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
-                            Eliminar
-                        </button>
-                    </td>
-                </tr>
-            </form>
-        {% endfor %}
-        
+              {% for dato in datos %}
+                    <form method="POST" action="/eliminarDocente">
+                        <tr>
+                            <td class="px-2 py-4 whitespace-nowrap">{{ dato.cedula_profesor }}</td>
+                            <td class="px-2 py-4 whitespace-nowrap">{{ dato.nombreprofesor }}</td>
+                            <td class="px-2 py-4 whitespace-nowrap">{{ dato.apellidoprofesor }}</td>
+                            <td class="px-2 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
+                            <td class="px-2 py-4 whitespace-nowrap">{{ dato.especializacion }}</td>
+                            <td class="px-2 py-4 whitespace-nowrap">
+                                <button class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </form>
+              {% endfor %}
           </tbody>
       </table>
   </div>
   
 
-      <script>
+    <script>
         // Obtener los elementos del DOM
         const agregarAlumnoButton = document.getElementById('agregar_alumno');
         const mostrarRegistrosButton = document.getElementById('mostrar-registros');
         const formularioDocentes = document.getElementById('formulario-docentes');
         const tablaDocentes = document.getElementById('tabla-docentes');
-      
+        
         // Función para mostrar el formulario
         function mostrarFormulario() {
-          formularioDocentes.style.display = 'block';
-          tablaDocentes.style.display = 'none';
+            formularioDocentes.style.display = 'block';
+            tablaDocentes.style.display = 'none';
         }
-      
+        
         // Función para mostrar la tabla
         function mostrarTabla() {
-          formularioDocentes.style.display = 'none';
-          tablaDocentes.style.display = 'block';
+            formularioDocentes.style.display = 'none';
+            tablaDocentes.style.display = 'block';
         }
-      
+        
         // Escuchar eventos de clic en los botones
         agregarAlumnoButton.addEventListener('click', mostrarFormulario);
         mostrarRegistrosButton.addEventListener('click', mostrarTabla);
-      </script>
+
+        function ListarMaterias(){
+            const materiasSeleccionadas = [];
+            const checkboxes = document.querySelectorAll('.clases:checked');
+
+            console.log(checkboxes)
+            
+            checkboxes.forEach(function (checkbox) {
+                materiasSeleccionadas.push(checkbox.value);
+            });
+
+            // Enviar los datos al servidor en formato JSON
+            fetch('/docentes_registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(materiasSeleccionadas)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
       
       
     
