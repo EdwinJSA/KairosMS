@@ -99,10 +99,10 @@ def registro_cursos():
     nombre = request.form.get('nombrecurso')
     descripcion = request.form.get('descripcioncurso')
     creditos = request.form.get('creditos')
+    semestre= request.form.get('semestre')
+    query = text("INSERT INTO cursos (cursoid, nombrecurso, descripcioncurso, creditos, semestre) VALUES (:id, :nombre, :descripcion, :creditos, :semestre)")    
     
-    query = text("INSERT INTO cursos (cursoid, nombrecurso, descripcioncurso, creditos) VALUES (:id, :nombre, :descripcion, :creditos)")    
-    
-    db.execute(query, {'id': id, 'nombre': nombre, 'descripcion': descripcion, 'creditos': creditos})
+    db.execute(query, {'id': id, 'nombre': nombre, 'descripcion': descripcion, 'creditos': creditos, 'semestre':semestre})
     db.commit()
     
     return render_template('cursos.html')
@@ -116,10 +116,10 @@ def registro_estudiantes():
     fecha = request.form.get('fecha_nacimiento')
     telefono = request.form.get('telefono')
     correo = request.form.get('correo')
+    semestre= request.form.get('semestre')
+    query = text("INSERT INTO estudiantes (estudianteid, nombre, apellido, fechanacimiento, telefono, correoelectronico,semestre) VALUES (:carnet, :nombre, :apellido, :fecha, :telefono, :correo, :semestre)")
     
-    query = text("INSERT INTO estudiantes (estudianteid, nombre, apellido, fechanacimiento, telefono, correoelectronico) VALUES (:carnet, :nombre, :apellido, :fecha, :telefono, :correo)")
-    
-    db.execute(query, {'carnet': carnet, 'nombre': nombre, 'apellido': apellido, 'telefono': telefono, 'fecha': fecha, 'correo': correo})
+    db.execute(query, {'carnet': carnet, 'nombre': nombre, 'apellido': apellido, 'telefono': telefono, 'fecha': fecha, 'correo': correo, 'semestre': semestre})
     
     db.commit()
     
