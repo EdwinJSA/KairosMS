@@ -40,10 +40,13 @@ def matricula():
 def login():
     correo = request.form.get('correo')
     contraseña = request.form.get('contraseña')
+    
+    alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
+    docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
 
     if correo == adminUser and contraseña == adminPass:
         session["user_id"] = correo
-        return redirect(url_for('home'))
+        return render_template('home.html',alumnos=alumnos,docentes=docentes)
     
     flash("Credenciales inválidas. Inténtalo de nuevo.", "error")
     return redirect(url_for('index'))
@@ -86,7 +89,11 @@ def estudiantes():
 @app.route("/home")
 def home():
     if "user_id" in session:
-        return render_template('home.html')
+        
+        alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
+        docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
+        
+        return render_template('home.html', alumnos=alumnos, docentes=docentes)
     
     return render_template('index.html')
 
