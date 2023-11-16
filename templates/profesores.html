@@ -12,7 +12,7 @@
 
     <div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md hidden" id="formulario-docentes">
         <h1 class="text-2xl font-semibold mb-4">Formulario de Docente</h1>
-        <form>
+        <form method="POST" action="/docentes_registro">
             <!-- Campo Cédula -->
             <div class="mb-4">
                 <label for="cedula" class="block text-sm font-medium text-gray-600" pattern="^\d{3}-\d{6}-\d{4}P$">Cédula</label>
@@ -50,7 +50,7 @@
     
             <!-- Botón de Enviar -->
             <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300" onclick="ListarMaterias()">Enviar</button>
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Enviar</button>
             </div>
         </form>
     </div>  

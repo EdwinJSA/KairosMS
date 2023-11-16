@@ -26,18 +26,6 @@ def create_tables():
             SEMESTRE INT UNIQUE
         )
     """
-
-
-    tabla_cursos = """
-        CREATE TABLE Cursos (
-            CursoID INT PRIMARY KEY,
-            NombreCurso VARCHAR(100),
-            DescripcionCurso TEXT,
-            creditos INT,
-            SEMESTRE INT
-        )
-    """
-
     tabla_profesores = """
         CREATE TABLE Profesores (
             cedula_profesor TEXT PRIMARY KEY,
@@ -47,21 +35,32 @@ def create_tables():
             Especializacion VARCHAR(100)
         )
     """
+    
+    
+    tabla_cursos = """
+        CREATE TABLE Cursos (
+            CursoID INT PRIMARY KEY,
+            NombreCurso VARCHAR(100),
+            DescripcionCurso TEXT,
+            creditos INT,
+            SEMESTRE INT,
+            FOREIGN KEY (ProfesorID) REFERENCES Profesores (cedula_profesor)
+        )
+    """
+
 
     tabla_matricula = """
         CREATE TABLE Matricula (
             MatriculaID INT PRIMARY KEY,
             EstudianteID TEXT,
             CursoID INT,
-            ProfesorID TEXT,
             AnoAcademico INT,
             estudianteSemestre INT,
             cursoSemestre INT,
             FOREIGN KEY (estudianteSemestre) REFERENCES Estudiantes (SEMESTRE),
             FOREIGN KEY (cursoSemestre) REFERENCES Estudiantes (SEMESTRE),
             FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
-            FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID),
-            FOREIGN KEY (ProfesorID) REFERENCES Profesores (cedula_profesor)
+            FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID)
         )
     """
 

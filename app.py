@@ -85,7 +85,8 @@ def home():
 @app.route("/docentes_registro", methods=['POST'])
 def registro_docentes():
     try:
-        data = request.get_json()
+        data = request.form
+        print(data)
         cedula = data.get('cedula')
         nombre = data.get('nombre')
         apellido = data.get('apellido')
@@ -97,8 +98,8 @@ def registro_docentes():
 
         db.execute(query, {'cedula': cedula, 'nombre': nombre, 'apellido': apellido, 'correo': correo, 'titulo': titulo})
         db.commit()
-
-        return jsonify({'message': 'Registro exitoso'})
+        
+        return render_template('profesores.html')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
