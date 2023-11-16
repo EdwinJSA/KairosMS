@@ -1,37 +1,30 @@
 {% extends 'layout.html' %}
 {%block title%} Matricula {%endblock%} 
 {% block body %}
-<ul>
-    <li><input type="checkbox" class="clases" id="clase1">Clase 1</li>
-    <li><input type="checkbox" class="clases" id="clase2">Clase 2</li>
-    <li><input type="checkbox" class="clases" id="clase3">Clase 3</li>
-</ul>
-<button onclick="crearLista()">Matricular</button>
+    <form action="" method="GET" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mb-8">
+        <div class="mb-4">
+        <label for="carnet" class="block text-gray-600">Carnet</label>
+        <input type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required>
+        </div>
+        <div class="text-center">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Buscar</button>
+        </div>
+    </form>
 
-<script>
-    function crearLista() {
-        let lista = [];
-        let checkboxes = document.getElementsByClassName('clases');
-
-        for (let checkbox of checkboxes) {
-            if (checkbox.checked) {
-                //trim sirve para eliminar los espacios entre cadenas de texto
-                lista.push(checkbox.parentElement.innerText.trim());
-            }
-        }
-
-        fetch('/guardar_elementos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 'lista': lista })
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
+    <form action="/matricularAlumno" method="POST" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div class="mb-4">
+        <label for="materias" class="block text-gray-600">Materias</label>
+        <div class="grid grid-cols-2 gap-4">
+            {% for curso in cursos %}
+            <label for="{{ curso.id }}" class="flex items-center">
+                <input type="checkbox" name="{{ curso.id }}" id="{{ curso.id }}" value="{{ curso.nombre }}" class="mr-2">
+                <span>{{ curso.nombre }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        </div>
+        <div class="text-center">
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300">Matricular</button>
+        </div>
+    </form>
 {% endblock %}
