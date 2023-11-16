@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, flash, redirect, render_template, request, session, url_for,jsonify
 from dotenv import load_dotenv  
+import random
 
 app = Flask(__name__)
 
@@ -43,11 +44,11 @@ def login():
     
     alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
     docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
-    matricula = db.execute(text("SELECT COUNT (matriculaid) FROM matricula")).fetchone()[0]
+    matriculados = db.execute(text("SELECT COUNT(DISTINCT estudianteid) FROM matricula")).fetchone()[0]
 
     if correo == adminUser and contraseña == adminPass:
         session["user_id"] = correo
-        return render_template('home.html',alumnos=alumnos,docentes=docentes, matricula=matricula)
+        return render_template('home.html',alumnos=alumnos,docentes=docentes, matriculados=matriculados)
     
     flash("Credenciales inválidas. Inténtalo de nuevo.", "error")
     return redirect(url_for('index'))
@@ -93,9 +94,10 @@ def home():
         
         alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
         docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
-        matricula = db.execute(text("SELECT COUNT (matriculaid) FROM matricula")).fetchone()[0]
+        matricula = db.execute(text("SELECT COUNT(DISTINCT estudianteid) FROM matricula")).fetchone()[0]
+        print(matricula)
         
-        return render_template('home.html', alumnos=alumnos, docentes=docentes, matricula = matricula)
+        return render_template('home.html', alumnos=alumnos, docentes=docentes, matriculados = matricula)
     
     return render_template('index.html')
 
@@ -235,6 +237,41 @@ def guardar_elementos():
     lista = data.get('lista', [])
     print(lista)
     return 'Elementos recibidos con éxito'
+
+@app.route('/matriculaEstudiante', methods=['GET'])
+def matriculaget():
+    query = text("SELECT * FROM estudiantes WHERE estudianteid = :carnet")
+    datos = db.execute(query, {'carnet': request.args.get("carnet")}).fetchone()
+    
+    semestre = datos[6]
+    query_cursos = text("SELECT * FROM cursos WHERE semestre = :semestre")
+    cursos = db.execute(query_cursos, {'semestre': semestre}).fetchall()
+    
+    print(cursos)
+
+    return render_template('matricula.html', estudiante=datos, cursos=cursos)
+
+@app.route('/matricularAlumno', methods=['POST'])
+def matricularEstudiante():
+    print(request.form.get('carnet'))
+    print(request.form.getlist('cursos'))
+    
+    for curso in request.form.getlist('cursos'):
+        query = text("INSERT INTO matricula (MatriculaID, EstudianteID, CursoID, AnoAcademico, estudianteSemestre, cursoSemestre) VALUES (:MatriculaID, :EstudianteID, :CursoID, :AnoAcademico, :estudianteSemestre, :cursoSemestre)")
+        db.execute(query, {
+            'MatriculaID': random.randint(1, 100000),
+            'EstudianteID': request.form.get('carnet'),
+            'CursoID': int(curso),
+            'AnoAcademico': 2023,
+            'estudianteSemestre': 1,
+            'cursoSemestre': 1
+        })
+        db.commit()
+    # slice carnet
+    
+    #redirect to matricula
+    return render_template('matricula.html')
+    
 
 if __name__ == '__main__':
     app.run()

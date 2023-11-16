@@ -54,13 +54,11 @@ def create_tables():
             MatriculaID INT PRIMARY KEY,
             EstudianteID TEXT,
             CursoID INT,
-            ProfesorID TEXT,
             AnoAcademico INT,
             estudianteSemestre INT,
             cursoSemestre INT,
             FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
-            FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID),
-            FOREIGN KEY (ProfesorID) REFERENCES Profesores (cedula_profesor)
+            FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID)
         )
     """
 

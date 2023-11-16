@@ -1,24 +1,27 @@
 {% extends 'layout.html' %}
 {%block title%} Matricula {%endblock%} 
 {% block body %}
-    <form action="" method="GET" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mb-8">
+    <form method="GET" action="/matriculaEstudiante" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mb-8">
         <div class="mb-4">
         <label for="carnet" class="block text-gray-600">Carnet</label>
         <input type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required>
         </div>
         <div class="text-center">
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Buscar</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Buscar</button>
         </div>
     </form>
 
     <form action="/matricularAlumno" method="POST" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
         <div class="mb-4">
+        {% if estudiante %}
+            <input value="{{ estudiante.estudianteid }}" type="text" id="carnet" name="carnet" pattern="^\d{4}-\d{4}[A-Z]$" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" required />
+        {% endif %}
         <label for="materias" class="block text-gray-600">Materias</label>
         <div class="grid grid-cols-2 gap-4">
             {% for curso in cursos %}
-            <label for="{{ curso.id }}" class="flex items-center">
-                <input type="checkbox" name="{{ curso.id }}" id="{{ curso.id }}" value="{{ curso.nombre }}" class="mr-2">
-                <span>{{ curso.nombre }}</span>
+            <label for="{{ curso.cursoid }}" class="flex items-center">
+                <input type="checkbox" name="cursos" id="{{ curso.cursoid }}" value="{{ curso.cursoid }}" class="mr-2">
+                <span>{{ curso.nombrecurso }}</span>
             </label>
             {% endfor %}
         </div>
