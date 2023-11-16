@@ -43,10 +43,11 @@ def login():
     
     alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
     docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
+    matricula = db.execute(text("SELECT COUNT (matriculaid) FROM matricula")).fetchone()[0]
 
     if correo == adminUser and contraseña == adminPass:
         session["user_id"] = correo
-        return render_template('home.html',alumnos=alumnos,docentes=docentes)
+        return render_template('home.html',alumnos=alumnos,docentes=docentes, matricula=matricula)
     
     flash("Credenciales inválidas. Inténtalo de nuevo.", "error")
     return redirect(url_for('index'))
@@ -92,8 +93,9 @@ def home():
         
         alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
         docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
+        matricula = db.execute(text("SELECT COUNT (matriculaid) FROM matricula")).fetchone()[0]
         
-        return render_template('home.html', alumnos=alumnos, docentes=docentes)
+        return render_template('home.html', alumnos=alumnos, docentes=docentes, matricula = matricula)
     
     return render_template('index.html')
 
