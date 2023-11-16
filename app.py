@@ -93,39 +93,18 @@ def home():
 # Toma los valores del formulario y los almacena en la base de datos - tabla profesores
 @app.route("/docentes_registro", methods=['POST'])
 def registro_docentes():
-<<<<<<< HEAD
     cedula = request.form.get('cedula')
     nombre = request.form.get('nombre')
     apellido = request.form.get('apellido')
     correo = request.form.get('correo')
     titulo = request.form.get('titulo')
-=======
-    try:
-        data = request.form
-        print(data)
-        cedula = data.get('cedula')
-        nombre = data.get('nombre')
-        apellido = data.get('apellido')
-        correo = data.get('correo')
-        titulo = data.get('titulo')
-        materias = data.get('materias')
->>>>>>> 13efbb45e7dad9d203796f4125f3477a22b133a0
 
     query = text("INSERT INTO profesores (cedula_profesor, nombreprofesor, apellidoprofesor, correoelectronico, especializacion) VALUES (:cedula, :nombre, :apellido, :correo, :titulo)")
 
-<<<<<<< HEAD
     db.execute(query, {'cedula': cedula, 'nombre': nombre, 'apellido': apellido, 'correo': correo, 'titulo': titulo})
     db.commit()
 
     return render_template('profesores.html')
-=======
-        db.execute(query, {'cedula': cedula, 'nombre': nombre, 'apellido': apellido, 'correo': correo, 'titulo': titulo})
-        db.commit()
-        
-        return render_template('profesores.html')
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
->>>>>>> 13efbb45e7dad9d203796f4125f3477a22b133a0
 
 # Toma los valores del formulario y los almacena en la base de datos - tabla cursos
 @app.route("/cursos_registro", methods=['POST'])
