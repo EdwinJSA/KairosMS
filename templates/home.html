@@ -6,9 +6,10 @@
         border = solid 1px black;
       }
     </style>
-    <div class="" id="Consolidado">
-      <!--ESTA ES LA CARD DEL DOCENTE-->
-      <div class="rounded overflow-hidden shadow-lg text-center">
+    <div class="flex justify-between" id="Consolidado">
+
+      <!-- TARJETA DEL DOCENTE -->
+      <div class="max-w-xs rounded overflow-hidden shadow-lg text-center">
         <div class="flex items-center justify-center">
           <div class="text-center">
             <img class="h-40" src="../static/src/profesor.png" alt="Imagen de la tarjeta">
@@ -16,25 +17,33 @@
         </div>
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2"># Docentes Registrados</div>
-      </div>
-    <!--ESTA ES LA CARD DEL ALUMNO-->
-    <div class="rounded overflow-hidden shadow-lg text-center">
-      <div class="flex items-center justify-center">
-        <div class=" text-center">
-          <img class="h-40" src="../static/src/estudiantes.png" alt="Imagen de la tarjeta">
         </div>
       </div>
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2"># Estudiantes Registrados</div>
-    </div>
-  <!--ESTA ES LA CARD DE MATRICULA-->
-  <div class=" rounded overflow-hidden shadow-lg text-center">
-    <div class="flex items-center justify-center">
-      <div class=" text-center">
-        <img class="h-40" src="../static/src/tesis.png" alt="Imagen de la tarjeta">
+    
+      <!-- TARJETA DEL ALUMNO -->
+      <div class="max-w-xs rounded overflow-hidden shadow-lg text-center">
+        <div class="flex items-center justify-center">
+          <div class="text-center">
+            <img class="h-40" src="../static/src/estudiantes.png" alt="Imagen de la tarjeta">
+          </div>
+        </div>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2"># Estudiantes Registrados</div>
+        </div>
       </div>
+    
+      <!-- TARJETA DE MATRICULA -->
+      <div class="max-w-xs rounded overflow-hidden shadow-lg text-center">
+        <div class="flex items-center justify-center">
+          <div class="text-center">
+            <img class="h-40" src="../static/src/tesis.png" alt="Imagen de la tarjeta">
+          </div>
+        </div>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2"># Matriculados</div>
+        </div>
+      </div>
+    
     </div>
-    <div class="px-6 py-4">
-      <div class="font-bold text-xl mb-2"># Matriculados</div>
-  </div>
+    
     {%endblock%}

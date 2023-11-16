@@ -26,7 +26,16 @@ def create_tables():
             SEMESTRE INT UNIQUE
         )
     """
-
+    
+    tabla_profesores = """
+        CREATE TABLE Profesores (
+            cedula_profesor TEXT PRIMARY KEY,
+            NombreProfesor VARCHAR(50) UNIQUE,
+            ApellidoProfesor VARCHAR(50),
+            CorreoElectronico VARCHAR(100),
+            Especializacion VARCHAR(100)
+        )
+    """
 
     tabla_cursos = """
         CREATE TABLE Cursos (
@@ -34,17 +43,9 @@ def create_tables():
             NombreCurso VARCHAR(100),
             DescripcionCurso TEXT,
             creditos INT,
-            SEMESTRE INT
-        )
-    """
-
-    tabla_profesores = """
-        CREATE TABLE Profesores (
-            cedula_profesor TEXT PRIMARY KEY,
-            NombreProfesor VARCHAR(50),
-            ApellidoProfesor VARCHAR(50),
-            CorreoElectronico VARCHAR(100),
-            Especializacion VARCHAR(100)
+            SEMESTRE INT,
+            profesor TEXT,
+            FOREIGN KEY (profesor) REFERENCES Profesores (nombreprofesor)
         )
     """
 
@@ -57,27 +58,14 @@ def create_tables():
             AnoAcademico INT,
             estudianteSemestre INT,
             cursoSemestre INT,
-            FOREIGN KEY (estudianteSemestre) REFERENCES Estudiantes (SEMESTRE),
-            FOREIGN KEY (cursoSemestre) REFERENCES Estudiantes (SEMESTRE),
             FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
             FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID),
             FOREIGN KEY (ProfesorID) REFERENCES Profesores (cedula_profesor)
         )
     """
 
-    tabla_calificaciones = """
-        CREATE TABLE Calificaciones (
-            CalificacionID INT PRIMARY KEY,
-            EstudianteID TEXT,
-            CursoID INT,
-            Nota DECIMAL(3, 2),
-            FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
-            FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID)
-        )
-    """
-
     try:
-        for tabla in [tabla_estudiantes, tabla_cursos, tabla_profesores, tabla_matricula, tabla_calificaciones]:
+        for tabla in [tabla_estudiantes, tabla_profesores, tabla_cursos, tabla_matricula]:
             db.execute(text(tabla))
         db.commit()
         print("La base de datos fue creada")

@@ -12,7 +12,7 @@
 
     <div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md hidden" id="formulario-docentes">
         <h1 class="text-2xl font-semibold mb-4">Formulario de Docente</h1>
-        <form>
+        <form action="/docentes_registro" method="POST">
             <!-- Campo Cédula -->
             <div class="mb-4">
                 <label for="cedula" class="block text-sm font-medium text-gray-600" pattern="^\d{3}-\d{6}-\d{4}P$">Cédula</label>
@@ -38,19 +38,10 @@
                 <label for="titulo" class="block text-sm font-medium text-gray-600">Título Universitario</label>
                 <input type="text" id="titulo" name="titulo" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
             </div>
-            <!-- Campo Título Universitario -->
-            <div class="mb-4">
-                <label for="titulo" class="block text-sm font-medium text-gray-600">Cursos a Impartir</label>
-                {% for curso in cursos %}
-                    <ul>
-                        <li><input type="checkbox" class="clases" id="clase_{{ curso.nombrecurso }}" value="{{ curso.nombrecurso }}">{{ curso.nombrecurso }}</li>
-                    </ul>
-                {% endfor %}    
-            </div>
     
             <!-- Botón de Enviar -->
             <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300" onclick="ListarMaterias()">Enviar</button>
+                <button type="submit" class="bg-blue-500 text-white rounded-full px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Enviar</button>
             </div>
         </form>
     </div>  
@@ -63,7 +54,6 @@
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo Electrónico</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título Universitario</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
               </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -75,11 +65,6 @@
                             <td class="px-2 py-4 whitespace-nowrap">{{ dato.apellidoprofesor }}</td>
                             <td class="px-2 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
                             <td class="px-2 py-4 whitespace-nowrap">{{ dato.especializacion }}</td>
-                            <td class="px-2 py-4 whitespace-nowrap">
-                                <button class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded-full">
-                                    Eliminar
-                                </button>
-                            </td>
                         </tr>
                     </form>
               {% endfor %}
