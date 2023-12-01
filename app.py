@@ -41,14 +41,47 @@ def matricula():
 def login():
     correo = request.form.get('correo')
     contraseña = request.form.get('contraseña')
+    tipo = request.form.get('tipoUsuario')
     
     alumnos = db.execute(text("SELECT COUNT (nombre) FROM estudiantes")).fetchone()[0]
     docentes = db.execute(text("SELECT COUNT (nombreprofesor) FROM profesores")).fetchone()[0]
     matriculados = db.execute(text("SELECT COUNT(DISTINCT estudianteid) FROM matricula")).fetchone()[0]
 
-    if correo == adminUser and contraseña == adminPass:
-        session["user_id"] = correo
-        return render_template('home.html',alumnos=alumnos,docentes=docentes, matriculados=matriculados)
+    if tipo == "estudiante":
+        
+        try:
+            if correo and contraseña:
+                query = text("SELECT * FROM estudiantes WHERE correoelectronico = :correo")
+                result = db.execute(query, {"correo": correo})
+                datos = result.fetchall()
+                print(datos)
+                if contraseña == datos[0][0]:
+                    session['user_id'] = datos[0][0]
+                    return render_template("alumnoVista.html")
+            else:
+                flash("Por favor, introduce tus datos")
+        except:
+            return render_template("index.html")
+        
+    elif tipo == "profesor":
+        try:
+            if correo and contraseña:
+                query = text("SELECT * FROM profesores WHERE correoelectronico = :correo")
+                result = db.execute(query, {"correo": correo})
+                datos = result.fetchall()
+                print(datos)
+                if datos and contraseña == datos[0][0]:
+                    session['user_id'] = datos[0][0]
+                    return render_template("docenteVista.html")
+            else:
+                flash("Por favor, introduce tus datos")
+        except:
+            return render_template("index.html")
+    
+    elif tipo == "administrador":
+        if correo == adminUser and contraseña == adminPass:
+            session["user_id"] = correo
+            return render_template('home.html',alumnos=alumnos,docentes=docentes, matriculados=matriculados)
     
     flash("Credenciales inválidas. Inténtalo de nuevo.", "error")
     return redirect(url_for('index'))
@@ -267,9 +300,7 @@ def matricularEstudiante():
             'cursoSemestre': 1
         })
         db.commit()
-    # slice carnet
-    
-    #redirect to matricula
+
     return render_template('matricula.html')
     
 

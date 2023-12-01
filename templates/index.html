@@ -24,6 +24,14 @@
           <label for="contraseña" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
           <input type="password" id="contraseña" name="contraseña" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Escribe tu contraseña" required>
         </div>
+        <div class="mb-6">
+          <label for="contraseña" class="block text-gray-700 text-sm font-bold mb-2">Tipo Usuario</label>
+          <select name="tipoUsuario" id="">
+              <option value="estudiante" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">Estudiante</option>
+              <option value="profesor" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">Profesor</option>
+              <option value="administrador" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">Administrador</option>
+          </select>
+        </div>
         <div class="flex items-center justify-between">
           <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md focus:outline-none focus:shadow-outline-blue hover:bg-blue-600">
             Entrar

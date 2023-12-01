@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Notas</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Estilo adicional para los botones */
+        .btn-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+        }
+        .btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #perfil{
+            height: 40px;
+            margin-right: 1rem;
+        }
+
+        #usuarioPerfil{
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Button Container -->
+    <div class="btn-container">
+        <!-- Burger Menu Button (Mobile) -->
+        <button class="lg:hidden btn" id="toggleBurgerMenu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Close Menu Button (Mobile) -->
+        <button class="lg:hidden btn hidden" id="closeBurgerMenu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sidebar (Hidden by Default on Mobile) -->
+    <div class="h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform ease-in-out duration-300" id="sidebar">
+        <div class="p-4" id="usuarioPerfil">
+            {% if usuario %}
+            <p>{{ usuario.nombre }}</p>
+            {% endif %}
+            <img class="h-40" src="../static/src/usuario.png" id="perfil" alt="Imagen de la tarjeta">hi
+        </div>
+        <ul class="mt-6">
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/home">Notas</a></li>
+        </ul>   
+    </div>
+
+    <!-- Content -->
+    <div class="ml-0 lg:ml-64 p-4">
+        <div class="w-full overflow-x-auto" id = "tabla">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Materia</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IS</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIS</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIP</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NF</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for dato in datos %}
+                    <form method="POST" action="/eliminarEstudiante">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.estudianteid }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombre }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.apellido }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.fechanacimiento }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.telefono }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const toggleBurgerMenu = document.getElementById("toggleBurgerMenu");
+        const closeBurgerMenu = document.getElementById("closeBurgerMenu");
+
+        toggleBurgerMenu.addEventListener("click", () => {
+            sidebar.classList.toggle("-translate-x-full");
+            closeBurgerMenu.classList.remove("hidden");
+            toggleBurgerMenu.classList.add("hidden");
+        });
+
+        closeBurgerMenu.addEventListener("click", () => {
+            sidebar.classList.toggle("-translate-x-full");
+            toggleBurgerMenu.classList.remove("hidden");
+            closeBurgerMenu.classList.add("hidden");
+        });
+    </script>
+</body>
+</html>
