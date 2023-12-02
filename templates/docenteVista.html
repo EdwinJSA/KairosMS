@@ -95,14 +95,15 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for dato in datos %}
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap"><input type="string" id="{{ dato.nombre|replace(' ', '_') }}_nombre" name="{{ dato.nombre|replace(' ', '_') }}_nombre" disabled value="{{ dato.nombre }}"></td>
-                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre|replace(' ', '_') }}_IS" name="{{ dato.nombre|replace(' ', '_') }}_IS" placeholder="IS"></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><input type="string" id="{{ dato.nombre }}_nombre" name="{{ dato.nombre }}_nombre" disabled value="{{ dato.nombre }}"></td>
+                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IS" name="{{ dato.nombre }}_IS" placeholder="IS"></td>
                                 <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IIS" name="{{ dato.nombre }}_IIS" placeholder="IIS"></td>
                                 <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IP" name="{{ dato.nombre }}_IP" placeholder="IP"></td>
                                 <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IIP" name="{{ dato.nombre }}_IIP" placeholder="IIP"></td>
                                 <td class="px-1 py-4 whitespace-nowrap">0</td>
                             </tr>
                         {% endfor %}
+                        <input type="hidden" id="asignatura" name="asignatura" value="{{ asignatura }}">
                     </tbody>
                 </table>
                 <button type="submit">Guardar</button>

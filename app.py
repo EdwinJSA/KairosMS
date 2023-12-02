@@ -324,7 +324,7 @@ def docenteAdmin():
                 query = text("SELECT nombre FROM estudiantes JOIN matricula ON estudiantes.estudianteid = matricula.estudianteid JOIN cursos ON matricula.cursoid = cursos.cursoid WHERE nombrecurso = :curso")
                 datos = db.execute(query, {'curso': asignatura}).fetchall()
                 print(materias)
-                return render_template('docenteVista.html', datos=datos, materias=materias)
+                return render_template('docenteVista.html', datos=datos, materias=materias, asignatura=asignatura)
             
             return render_template('docenteVista.html', materias=materias)
             
@@ -340,11 +340,40 @@ def docenteAdmin():
 def subirNota():
     print("ENTRO AL METODO")
     print(len(request.form))
+
     try:
-        for campo, valor in request.form.items():
-            print(f'{campo}: {valor}')
+        asignatura = request.form.get('asignatura')
+        free_form = request.form.to_dict()
+        free_form.pop('asignatura')
+        datos_formulario = free_form.items()
+
+        datos_agrupados = {}
+        for key, value in datos_formulario:
+            nombre, sufijo = key.rsplit('_', 1)
+            if nombre not in datos_agrupados:
+                datos_agrupados[nombre] = {}
+
+            datos_agrupados[nombre][sufijo] = value
+
+        for nombre, notas in datos_agrupados.items():
+            print(nombre, notas)
+            estudianteId = db.execute(text("SELECT estudianteid FROM estudiantes WHERE nombre = :nombre"), {'nombre': nombre}).fetchone()[0]
+            cursoId = db.execute(text("SELECT cursoid FROM cursos WHERE nombrecurso = :nombrecurso"), {'nombrecurso': asignatura}).fetchone()[0]
+            query = text("INSERT INTO notas (EstudianteID, CursoID, ISist, IP, IISist, IIP, NF) VALUES (:EstudianteID, :CursoID, :ISist, :IP, :IISist, :IIP, :NF)")
+            db.execute(query, {
+                'EstudianteID': estudianteId,
+                'CursoID': cursoId,
+                'ISist': notas['IS'],
+                'IP': notas['IP'],
+                'IISist': notas['IIS'],
+                'IIP': notas['IIP'],
+                'NF': notas.get('NF', 0)
+            })
+            db.commit()
+
     except Exception as e:
-        print(e)
+        print('Error al subir notas', e)
+
     return render_template('docenteVista.html')
 
 if __name__ == '__main__':
