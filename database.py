@@ -15,58 +15,80 @@ engine = create_engine(DATABASE_URL)
 db = scoped_session(sessionmaker(bind=engine))
 
 def create_tables():
-    tabla_estudiantes = """
-        CREATE TABLE Estudiantes (
-            EstudianteID TEXT PRIMARY KEY,
-            Nombre VARCHAR(50),
-            Apellido VARCHAR(50),
-            FechaNacimiento DATE,
-            Telefono VARCHAR(15),
-            CorreoElectronico VARCHAR(100),
-            SEMESTRE INT UNIQUE
-        )
-    """
+    # tabla_estudiantes = """
+    #     CREATE TABLE Estudiantes (
+    #         EstudianteID TEXT PRIMARY KEY,
+    #         Nombre VARCHAR(50),
+    #         Apellido VARCHAR(50),
+    #         FechaNacimiento DATE,
+    #         Telefono VARCHAR(15),
+    #         CorreoElectronico VARCHAR(100),
+    #         SEMESTRE INT UNIQUE
+    #     )
+    # """
     
-    tabla_profesores = """
-        CREATE TABLE Profesores (
-            cedula_profesor TEXT PRIMARY KEY,
-            NombreProfesor VARCHAR(50) UNIQUE,
-            ApellidoProfesor VARCHAR(50),
-            CorreoElectronico VARCHAR(100),
-            Especializacion VARCHAR(100)
-        )
-    """
+    # tabla_profesores = """
+    #     CREATE TABLE Profesores (
+    #         cedula_profesor TEXT PRIMARY KEY,
+    #         NombreProfesor VARCHAR(50) UNIQUE,
+    #         ApellidoProfesor VARCHAR(50),
+    #         CorreoElectronico VARCHAR(100),
+    #         Especializacion VARCHAR(100)
+    #     )
+    # """
 
-    tabla_cursos = """
-        CREATE TABLE Cursos (
-            CursoID INT PRIMARY KEY,
-            NombreCurso VARCHAR(100),
-            DescripcionCurso TEXT,
-            creditos INT,
-            SEMESTRE INT,
-            profesor TEXT,
-            FOREIGN KEY (profesor) REFERENCES Profesores (nombreprofesor)
-        )
-    """
+    # tabla_cursos = """
+    #     CREATE TABLE Cursos (
+    #         CursoID INT PRIMARY KEY,
+    #         NombreCurso VARCHAR(100),
+    #         DescripcionCurso TEXT,
+    #         creditos INT,
+    #         SEMESTRE INT,
+    #         profesor TEXT,
+    #         FOREIGN KEY (profesor) REFERENCES Profesores (nombreprofesor)
+    #     )
+    # """
 
-    tabla_matricula = """
-        CREATE TABLE Matricula (
-            MatriculaID INT PRIMARY KEY,
+    # tabla_matricula = """
+    #     CREATE TABLE Matricula (
+    #         MatriculaID INT PRIMARY KEY,
+    #         EstudianteID TEXT,
+    #         CursoID INT,
+    #         AnoAcademico INT,
+    #         estudianteSemestre INT,
+    #         cursoSemestre INT,
+    #         FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
+    #         FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID)
+    #     )
+    # """
+
+    # try:
+    #     for tabla in [tabla_estudiantes, tabla_profesores, tabla_cursos, tabla_matricula]:
+    #         db.execute(text(tabla))
+    #     db.commit()
+    #     print("La base de datos fue creada")
+    # except Exception as e:
+    #     print(f"Error al crear la base de datos: {e}")
+    #     db.rollback()
+    
+    tabla_notas = """
+        CREATE TABLE Notas (
             EstudianteID TEXT,
             CursoID INT,
-            AnoAcademico INT,
-            estudianteSemestre INT,
-            cursoSemestre INT,
+            ISist FLOAT,
+            IP FLOAT,
+            IISist FLOAT,
+            IIP FLOAT,
+            NF FLOAT,
             FOREIGN KEY (EstudianteID) REFERENCES Estudiantes (EstudianteID),
             FOREIGN KEY (CursoID) REFERENCES Cursos (CursoID)
         )
     """
 
     try:
-        for tabla in [tabla_estudiantes, tabla_profesores, tabla_cursos, tabla_matricula]:
-            db.execute(text(tabla))
+        db.execute(text(tabla_notas))
         db.commit()
-        print("La base de datos fue creada")
+        print("La TABLA fue creada")
     except Exception as e:
         print(f"Error al crear la base de datos: {e}")
         db.rollback()

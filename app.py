@@ -62,26 +62,28 @@ def login():
                 flash("Por favor, introduce tus datos")
         except:
             return render_template("index.html")
-        
-    elif tipo == "profesor":
-        try:
-            if correo and contraseña:
-                query = text("SELECT * FROM profesores WHERE correoelectronico = :correo")
-                result = db.execute(query, {"correo": correo})
-                datos = result.fetchall()
-                print(datos)
-                if datos and contraseña == datos[0][0]:
-                    session['user_id'] = datos[0][0]
-                    return render_template("docenteVista.html")
-            else:
-                flash("Por favor, introduce tus datos")
-        except:
-            return render_template("index.html")
     
-    elif tipo == "administrador":
+    if tipo == "administrador":
         if correo == adminUser and contraseña == adminPass:
             session["user_id"] = correo
             return render_template('home.html',alumnos=alumnos,docentes=docentes, matriculados=matriculados)
+        
+            
+    if tipo == "profesor":
+        try:
+            if correo and contraseña:
+                print("ENTRO A LA CONSULTA")
+                query = text("SELECT * FROM profesores WHERE correoelectronico = :correo")
+                result = db.execute(query, {"correo": correo})
+                datos = result.fetchall()
+                print(datos[0][0])
+                if contraseña == datos[0][0]:
+                    session['user_id'] = datos[0][0]
+                    return redirect(url_for('docenteAdmin'))
+                
+        except Exception as e:
+            print(e)
+            return render_template("index.html")
     
     flash("Credenciales inválidas. Inténtalo de nuevo.", "error")
     return redirect(url_for('index'))
@@ -302,7 +304,48 @@ def matricularEstudiante():
         db.commit()
 
     return render_template('matricula.html')
-    
+
+
+@app.route('/docenteAdmin', methods=['GET', 'POST'])
+def docenteAdmin():
+    try:
+        if 'user_id' in session:
+            cedula_profesor = session['user_id']
+            asignatura = request.args.get('asignatura')
+            materias = []
+            
+            #-----------MATERIAS QUE IMPARTE EL DOCENTE ----------------------------------
+            query = text("SELECT nombrecurso FROM cursos WHERE profesor = (SELECT nombreprofesor FROM profesores WHERE cedula_profesor = :cedula)")
+            materias = db.execute(query, {'cedula': cedula_profesor}).fetchall()        
+            
+            
+            if request.method == 'GET':
+                #------------ALUMNOS POR MATERIA QUE IMPARTE EL DOCENTE ----------------------
+                query = text("SELECT nombre FROM estudiantes JOIN matricula ON estudiantes.estudianteid = matricula.estudianteid JOIN cursos ON matricula.cursoid = cursos.cursoid WHERE nombrecurso = :curso")
+                datos = db.execute(query, {'curso': asignatura}).fetchall()
+                print(materias)
+                return render_template('docenteVista.html', datos=datos, materias=materias)
+            
+            return render_template('docenteVista.html', materias=materias)
+            
+        else:
+            # Manejar el caso en el que 'user_id' no esté presente en session
+            flash("Error: No se encontró 'user_id' en la sesión.")
+            return render_template("index.html")
+    except Exception as e:
+        print(e)
+        return render_template("index.html")
+
+@app.route('/subirNotas', methods=['POST'])
+def subirNota():
+    print("ENTRO AL METODO")
+    print(len(request.form))
+    try:
+        for campo, valor in request.form.items():
+            print(f'{campo}: {valor}')
+    except Exception as e:
+        print(e)
+    return render_template('docenteVista.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

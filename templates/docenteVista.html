@@ -57,57 +57,59 @@
     <!-- Sidebar (Hidden by Default on Mobile) -->
     <div class="h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform ease-in-out duration-300" id="sidebar">
         <div class="p-4" id="usuarioPerfil">
-            {% if usuario %}
-            <p>{{ usuario.nombre }}</p>
-            {% endif %}
+
             <img class="h-40" src="../static/src/usuario.png" id="perfil" alt="Imagen de la tarjeta">hi
         </div>
         <ul class="mt-6">
             <li class="px-4 py-2 hover:bg-gray-800"><a href="/home">Registro de Notas</a></li>
         </ul>   
     </div>
-
-    <div class="mb-6">
-        <label for="contraseña" class="block text-gray-700 text-sm font-bold mb-2">Materia</label>
-        <select name="materiasDocente" id="">
-            <option value="{{ materia.nombre }}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">{{ materia.nombre }}</option>
-        </select>
-        <div class="flex items-center justify-between">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md focus:outline-none focus:shadow-outline-blue hover:bg-blue-600">
-              Entrar
-            </button>
-      </div>
+    
 
     <!-- Content -->
     <div class="ml-0 lg:ml-64 p-4">
+
+        <form action="/docenteAdmin" method="GET">
+            <label for="asignatura">Seleccione una asignatura:</label>
+            <select name="asignatura" id="asignatura">
+                {% for dato in materias %}
+                    <option value="{{ dato.nombrecurso }}">{{ dato.nombrecurso }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Cargar</button>
+        </form>
+
         <div class="w-full overflow-x-auto" id = "tabla">
-            <table class="min-w-full bg-white">
-                <thead>
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alumno</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IS</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIS</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIP</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NF</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for dato in datos %}
-                    <form method="POST" action="/eliminarEstudiante">
+            <form action="/subirNotas" method="post">
+                <table class="min-w-full bg-white">
+                    <thead>
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.estudianteid }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombre }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.apellido }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.fechanacimiento }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.telefono }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alumno</th>
+                            <th class="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IS</th>
+                            <th class="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP</th>
+                            <th class="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIS</th>
+                            <th class="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IIP</th>
+                            <th class="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NF</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for dato in datos %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap"><input type="string" id="{{ dato.nombre|replace(' ', '_') }}_nombre" name="{{ dato.nombre|replace(' ', '_') }}_nombre" disabled value="{{ dato.nombre }}"></td>
+                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre|replace(' ', '_') }}_IS" name="{{ dato.nombre|replace(' ', '_') }}_IS" placeholder="IS"></td>
+                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IIS" name="{{ dato.nombre }}_IIS" placeholder="IIS"></td>
+                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IP" name="{{ dato.nombre }}_IP" placeholder="IP"></td>
+                                <td class="px-1 py-4 whitespace-nowrap"><input type="number" id="{{ dato.nombre }}_IIP" name="{{ dato.nombre }}_IIP" placeholder="IIP"></td>
+                                <td class="px-1 py-4 whitespace-nowrap">0</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit">Guardar</button>
+            </form>
         </div>
     </div>
+
 
     <script>
         const sidebar = document.getElementById("sidebar");
