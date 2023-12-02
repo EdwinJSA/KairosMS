@@ -57,7 +57,7 @@ def login():
                 print(datos)
                 if contraseña == datos[0][0]:
                     session['user_id'] = datos[0][0]
-                    return render_template("alumnoVista.html")
+                    return redirect(url_for('alumnoVista'))
             else:
                 flash("Por favor, introduce tus datos")
         except:
@@ -376,5 +376,32 @@ def subirNota():
 
     return render_template('docenteVista.html')
 
+
+@app.route('/alumnoVista')
+def alumnoVista():
+    try:
+        if 'user_id' in session:
+            try:
+                carnet = session['user_id']
+                print(carnet)
+                query = text("SELECT nombrecurso, isist, ip, iisist, iip, (notas.isist + notas.ip + notas.iisist + notas.iip) as suma_total FROM notas  JOIN cursos ON cursos.CursoID = notas.CursoID WHERE estudianteid = :id")
+                resul = db.execute(query, {'id': carnet}).fetchall()
+                print(resul)
+
+                if resul:
+                    return render_template('alumnoVista.html', datos=resul)
+                else:
+                    flash("No se encontraron datos para mostrar.")
+                    return render_template('alumnoVista.html')
+            except Exception as e:
+                flash(f"Error: {str(e)}")
+                return render_template('alumnoVista.html')
+        else:
+            # Handle the case where 'user_id' is not present in session
+            flash("Error: No se encontró 'user_id' en la sesión.")
+            return render_template("index.html")
+    except Exception as e:
+        flash(f"Error general: {str(e)}")
+        return render_template("index.html")
 if __name__ == '__main__':
     app.run(debug=True)

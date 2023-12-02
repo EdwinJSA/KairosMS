@@ -57,13 +57,11 @@
     <!-- Sidebar (Hidden by Default on Mobile) -->
     <div class="h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform ease-in-out duration-300" id="sidebar">
         <div class="p-4" id="usuarioPerfil">
-            {% if usuario %}
-            <p>{{ usuario.nombre }}</p>
-            {% endif %}
-            <img class="h-40" src="../static/src/usuario.png" id="perfil" alt="Imagen de la tarjeta">hi
+            <img class="h-40" src="../static/src/usuario.png" id="perfil" alt="Imagen de la tarjeta">
         </div>
         <ul class="mt-6">
-            <li class="px-4 py-2 hover:bg-gray-800"><a href="/home">Notas</a></li>
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="#">Notas</a></li>
+            <li class="px-4 py-2 hover:bg-gray-800"><a href="/logout">Salir del Sistema</a></li>
         </ul>   
     </div>
 
@@ -83,18 +81,18 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for dato in datos %}
-                    <form method="POST" action="/eliminarEstudiante">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.estudianteid }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombre }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.apellido }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.fechanacimiento }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.telefono }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ dato.correoelectronico }}</td>
-                        </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.nombrecurso }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.isist }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.ip }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.iisist }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.iip }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ dato.suma_total }}</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            
         </div>
     </div>
 
